@@ -1,7 +1,12 @@
 # Michele Carlin's Fourth Deliverable
 
-## Merging and reshaping code can be found [HERE](https://dacss-690r.github.io/Third_Deliverable/)
+## Aggregation and exporting code can be found [HERE](https://dacss-690r.github.io/Third_Deliverable/)
 
-## I merged gender & ethnicity variables into my ClerkshipGrades file matching on ID. ClerkshipGrades file is in long format so students have more than one row of data therefore I used a left join to merge the gender & ethnicity info from one line to many lines in the ClerkshipGrades file.
+## I used the ClerkshipGrades file for aggregating as outlined below:
 
-## I used fuzzy merge to update the location names in the ClerkshipGrades file (see below to see how the locations in the ClerkshipGrades file should be mapped to those in the Locations file).
+### One group, one input variable, and one function - I grouped the data by Rotation (e.g., Family Medicine Clerkship, Medicine Clerkship, etc.), then used the Final Numeric Score as the input variable, and used Mean as the function.
+
+### Two groups, one input variable, and two functions - I grouped the data by Rotation and Academic Year, using the Final Numeric Score as the input variable, and used Mean and SD as the two functions.
+
+### One group, two input variables, and a different function for each - I grouped the data by Rotation, I used the SPE and NBME numeric scores as the input variables, and then I used Mean/SD as the functions for SPE scores and Min/Max for NBME scores.
+
