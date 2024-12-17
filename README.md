@@ -1,6 +1,6 @@
 # Michele Carlin's Fourth Deliverable
 
-## Aggregation and exporting code can be found [HERE]([https://dacss-690r.github.io/Fourth_Deliverable/])
+## Aggregation and exporting code can be found [HERE](https://dacss-690r.github.io/Fourth_Deliverable/)
 
 ## I used the ClerkshipGrades file for aggregating as outlined below:
 
