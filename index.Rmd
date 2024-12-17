@@ -84,15 +84,19 @@ FinalScoreAvgSDbyClerkshipYear
 ```{r}
 saveRDS(FinalScoreAvgSDbyClerkshipYear, file = "finalOutput/output221.rds") 
 write.csv(FinalScoreAvgSDbyClerkshipYear,"finalOutput/output221.csv")
-arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = "finalOutput/output221.parquet")
+
+#arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = "finalOutput/output221.parquet")
 
 
 FinalScoreAvgSDbyClerkshipYear_rds <- readRDS("finalOutput/output221.rds")
 FinalScoreAvgSDbyClerkshipYear_csv <- read.csv("finalOutput/output221.csv")
-FinalScoreAvgSDbyClerkshipYear_parquet <- read_parquet("finalOutput/output221.parquet")
+
+#FinalScoreAvgSDbyClerkshipYear_parquet <- read_parquet("finalOutput/output221.parquet")
+
 FinalScoreAvgSDbyClerkshipYear_rds
 FinalScoreAvgSDbyClerkshipYear_csv
-FinalScoreAvgSDbyClerkshipYear_parquet
+
+#FinalScoreAvgSDbyClerkshipYear_parquet
 ```
 
 # Aggregrating with one group, two input variables, and a different function for each
