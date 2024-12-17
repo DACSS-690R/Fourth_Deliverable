@@ -1,0 +1,123 @@
+---
+title: 'M Carlin: Fourth Deliverable'
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+setwd("C:/Users/CarlinML/DACSS-690R/Fourth_Deliverable")
+getwd()
+```
+
+# Open Clerkship Grades file from Third Deliverable
+```{r}
+ClerkshipGrades <- readRDS(gzcon(url("https://github.com/DACSS-690R/Third_Deliverable/raw/main/DataConcatenatedMerged/ClerkshipGrades.RDS")))
+str(ClerkshipGrades) # 6427 rows
+```
+
+# Remove rows containing one or more missing values
+```{r}
+ClerkshipGrades_cleaned <- na.omit(ClerkshipGrades)
+str(ClerkshipGrades_cleaned)
+```
+
+# Modify name of one of the clerkships
+```{r}
+library(dplyr)
+ClerkshipGrades_cleaned <- ClerkshipGrades_cleaned %>%
+  mutate(Rotation = recode(Subject,
+        "FC" = "Family Medicine Clerkship",
+        "ME" = "Medicine Clerkship",
+        "NU" = "Neurology Clerkship",
+        "OB" = "Ob/Gyn Clerkship",
+        "PE" = "Pediatric Clerkship",
+        "PS" = "Psychiatry Clerkship",
+        "SU" = "Surgery Clerkship"))
+
+ClerkshipGrades_cleaned <- ClerkshipGrades_cleaned %>%
+  mutate(AcadYear = recode(Term,
+                "5202" = "AY22/23",
+                "5300" = "AY22/23",
+                "5301" = "AY22/23",
+                "5302" = "AY23/24",
+                "5400" = "AY23/24",
+                "5401" = "AY23/24"))
+
+ClerkshipGrades_cleaned$Final_Numeric <- as.numeric(ClerkshipGrades_cleaned$Final_Numeric)
+ClerkshipGrades_cleaned$SPE_Numeric <- as.numeric(ClerkshipGrades_cleaned$SPE_Numeric)
+ClerkshipGrades_cleaned$NBME_Numeric <- as.numeric(ClerkshipGrades_cleaned$NBME_Numeric)
+```
+
+# Aggregating with one group, one function, and one input variable
+```{r}
+FinalScoreAvgByClerkship=aggregate(data=ClerkshipGrades_cleaned,Final_Numeric~Rotation,mean)
+FinalScoreAvgByClerkship
+```
+
+# Save output111 as RDS, CSV, and Parquet
+```{r}
+library(arrow)
+saveRDS(FinalScoreAvgByClerkship, file = "finalOutput/output111.rds") 
+write.csv(FinalScoreAvgByClerkship,"finalOutput/output111.csv")
+arrow::write_parquet(FinalScoreAvgByClerkship,sink = "finalOutput/output111.parquet")
+
+
+FinalScoreAvgByClerkship_rds <- readRDS("finalOutput/output111.rds")
+FinalScoreAvgByClerkship_csv <- read.csv("finalOutput/output111.csv")
+FinalScoreAvgByClerkship_parquet <- read_parquet("finalOutput/output111.parquet")
+FinalScoreAvgByClerkship_rds
+FinalScoreAvgByClerkship_csv
+FinalScoreAvgByClerkship_parquet
+```
+
+# Aggregating with two groups, two functions, and one input variable
+```{r}
+FinalScoreAvgSDbyClerkshipYear=aggregate(data=ClerkshipGrades_cleaned,Final_Numeric~Rotation + AcadYear,
+          function(x) c(Mean = mean(x), SD = sd(x) ) )
+FinalScoreAvgSDbyClerkshipYear
+```
+
+# Save output221 as RDS, CSV, and Parquet
+```{r}
+saveRDS(FinalScoreAvgSDbyClerkshipYear, file = "finalOutput/output221.rds") 
+write.csv(FinalScoreAvgSDbyClerkshipYear,"finalOutput/output221.csv")
+arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = "finalOutput/output221.parquet")
+
+
+FinalScoreAvgSDbyClerkshipYear_rds <- readRDS("finalOutput/output221.rds")
+FinalScoreAvgSDbyClerkshipYear_csv <- read.csv("finalOutput/output221.csv")
+FinalScoreAvgSDbyClerkshipYear_parquet <- read_parquet("finalOutput/output221.parquet")
+FinalScoreAvgSDbyClerkshipYear_rds
+FinalScoreAvgSDbyClerkshipYear_csv
+FinalScoreAvgSDbyClerkshipYear_parquet
+```
+
+# Aggregrating with one group, two input variables, and a different function for each
+```{r}
+SPEandNBMEbyClerkshipDiffFunc <- 
+  ClerkshipGrades_cleaned |>
+   group_by(Rotation) |>
+   summarize(SPE_Mean = mean(SPE_Numeric),
+            SPE_SD = sd(SPE_Numeric),
+            NBME_Min = min(NBME_Numeric),
+            NBME_Max = max(NBME_Numeric))
+SPEandNBMEbyClerkshipDiffFunc
+```
+
+# Save output12f1f2 as RDS, CSV, and Parquet
+```{r}
+saveRDS(SPEandNBMEbyClerkshipDiffFunc, file = "finalOutput/output12f1f2.rds") 
+write.csv(SPEandNBMEbyClerkshipDiffFunc,"finalOutput/output12f1f2.csv")
+arrow::write_parquet(SPEandNBMEbyClerkshipDiffFunc,sink = "finalOutput/output12f1f2.parquet")
+
+SPEandNBMEbyClerkshipDiffFunc_rds <- readRDS("finalOutput/output12f1f2.rds")
+SPEandNBMEbyClerkshipDiffFunc_csv <- read.csv("finalOutput/output12f1f2.csv")
+SPEandNBMEbyClerkshipDiffFunc_parquet <- read_parquet("finalOutput/output12f1f2.parquet")
+SPEandNBMEbyClerkshipDiffFunc_rds
+SPEandNBMEbyClerkshipDiffFunc_csv
+SPEandNBMEbyClerkshipDiffFunc_parquet
+```
+
