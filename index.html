@@ -1677,8 +1677,9 @@ str(ClerkshipGrades_cleaned)</code></pre>
 ##  - attr(*, &quot;na.action&quot;)= &#39;omit&#39; Named int [1:4207] 1 2 3 4 5 6 7 8 9 10 ...
 ##   ..- attr(*, &quot;names&quot;)= chr [1:4207] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
 </div>
-<div id="modify-name-of-one-of-the-clerkships" class="section level1">
-<h1>Modify name of one of the clerkships</h1>
+<div id="create-new-variable-containing-clerkship-names-create-new-variable-for-academic-year" class="section level1">
+<h1>Create new variable containing clerkship names, create new variable
+for academic year</h1>
 <pre class="r"><code>library(dplyr)</code></pre>
 <pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.2.3</code></pre>
 <pre><code>## 
@@ -1761,12 +1762,12 @@ FinalScoreAvgByClerkship_rds</code></pre>
 <div id="aggregating-with-two-groups-two-functions-and-one-input-variable" class="section level1">
 <h1>Aggregating with two groups, two functions, and one input
 variable</h1>
-<pre class="r"><code>FinalScoreAvgSDbyClerkshipYear=aggregate(data=ClerkshipGrades_cleaned,Final_Numeric~Rotation + AcadYear,
-          function(x) c(Mean = mean(x), SD = sd(x) ) )
+<pre class="r"><code>FinalScoreAvgSDbyClerkshipYear=do.call(data.frame, aggregate(data=ClerkshipGrades_cleaned,Final_Numeric~Rotation + AcadYear,
+          function(x) c(Mean = mean(x), SD = sd(x) ) ))
 FinalScoreAvgSDbyClerkshipYear</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Rotation"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AcadYear"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Final_Numeric"],"name":[3],"type":["dbl[,2]"],"align":["right"]}],"data":[{"1":"Family Medicine Clerkship","2":"AY22/23","3.Mean":"92.916038","3.SD":"2.449271"},{"1":"Medicine Clerkship","2":"AY22/23","3.Mean":"85.165625","3.SD":"5.152691"},{"1":"Neurology Clerkship","2":"AY22/23","3.Mean":"87.794375","3.SD":"5.863535"},{"1":"Ob/Gyn Clerkship","2":"AY22/23","3.Mean":"85.901840","3.SD":"4.356370"},{"1":"Pediatric Clerkship","2":"AY22/23","3.Mean":"86.173913","3.SD":"6.392503"},{"1":"Psychiatry Clerkship","2":"AY22/23","3.Mean":"90.805031","3.SD":"3.026210"},{"1":"Surgery Clerkship","2":"AY22/23","3.Mean":"83.696875","3.SD":"8.942707"},{"1":"Family Medicine Clerkship","2":"AY23/24","3.Mean":"93.030059","3.SD":"2.799730"},{"1":"Medicine Clerkship","2":"AY23/24","3.Mean":"86.697712","3.SD":"4.723494"},{"1":"Neurology Clerkship","2":"AY23/24","3.Mean":"85.868651","3.SD":"3.642072"},{"1":"Ob/Gyn Clerkship","2":"AY23/24","3.Mean":"86.376623","3.SD":"5.350558"},{"1":"Pediatric Clerkship","2":"AY23/24","3.Mean":"85.648148","3.SD":"6.596074"},{"1":"Psychiatry Clerkship","2":"AY23/24","3.Mean":"91.018987","3.SD":"3.181298"},{"1":"Surgery Clerkship","2":"AY23/24","3.Mean":"85.466667","3.SD":"9.612399"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["Rotation"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AcadYear"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Final_Numeric.Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Final_Numeric.SD"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Family Medicine Clerkship","2":"AY22/23","3":"92.91604","4":"2.449271"},{"1":"Medicine Clerkship","2":"AY22/23","3":"85.16563","4":"5.152691"},{"1":"Neurology Clerkship","2":"AY22/23","3":"87.79438","4":"5.863535"},{"1":"Ob/Gyn Clerkship","2":"AY22/23","3":"85.90184","4":"4.356370"},{"1":"Pediatric Clerkship","2":"AY22/23","3":"86.17391","4":"6.392503"},{"1":"Psychiatry Clerkship","2":"AY22/23","3":"90.80503","4":"3.026210"},{"1":"Surgery Clerkship","2":"AY22/23","3":"83.69688","4":"8.942707"},{"1":"Family Medicine Clerkship","2":"AY23/24","3":"93.03006","4":"2.799730"},{"1":"Medicine Clerkship","2":"AY23/24","3":"86.69771","4":"4.723494"},{"1":"Neurology Clerkship","2":"AY23/24","3":"85.86865","4":"3.642072"},{"1":"Ob/Gyn Clerkship","2":"AY23/24","3":"86.37662","4":"5.350558"},{"1":"Pediatric Clerkship","2":"AY23/24","3":"85.64815","4":"6.596074"},{"1":"Psychiatry Clerkship","2":"AY23/24","3":"91.01899","4":"3.181298"},{"1":"Surgery Clerkship","2":"AY23/24","3":"85.46667","4":"9.612399"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -1774,19 +1775,16 @@ FinalScoreAvgSDbyClerkshipYear</code></pre>
 <h1>Save output221 as RDS, CSV, and Parquet</h1>
 <pre class="r"><code>saveRDS(FinalScoreAvgSDbyClerkshipYear, file = &quot;finalOutput/output221.rds&quot;) 
 write.csv(FinalScoreAvgSDbyClerkshipYear,&quot;finalOutput/output221.csv&quot;)
-
-#arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = &quot;finalOutput/output221.parquet&quot;)
+arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = &quot;finalOutput/output221.parquet&quot;)
 
 
 FinalScoreAvgSDbyClerkshipYear_rds &lt;- readRDS(&quot;finalOutput/output221.rds&quot;)
 FinalScoreAvgSDbyClerkshipYear_csv &lt;- read.csv(&quot;finalOutput/output221.csv&quot;)
-
-#FinalScoreAvgSDbyClerkshipYear_parquet &lt;- read_parquet(&quot;finalOutput/output221.parquet&quot;)
-
+FinalScoreAvgSDbyClerkshipYear_parquet &lt;- read_parquet(&quot;finalOutput/output221.parquet&quot;)
 FinalScoreAvgSDbyClerkshipYear_rds</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Rotation"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AcadYear"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Final_Numeric"],"name":[3],"type":["dbl[,2]"],"align":["right"]}],"data":[{"1":"Family Medicine Clerkship","2":"AY22/23","3.Mean":"92.916038","3.SD":"2.449271"},{"1":"Medicine Clerkship","2":"AY22/23","3.Mean":"85.165625","3.SD":"5.152691"},{"1":"Neurology Clerkship","2":"AY22/23","3.Mean":"87.794375","3.SD":"5.863535"},{"1":"Ob/Gyn Clerkship","2":"AY22/23","3.Mean":"85.901840","3.SD":"4.356370"},{"1":"Pediatric Clerkship","2":"AY22/23","3.Mean":"86.173913","3.SD":"6.392503"},{"1":"Psychiatry Clerkship","2":"AY22/23","3.Mean":"90.805031","3.SD":"3.026210"},{"1":"Surgery Clerkship","2":"AY22/23","3.Mean":"83.696875","3.SD":"8.942707"},{"1":"Family Medicine Clerkship","2":"AY23/24","3.Mean":"93.030059","3.SD":"2.799730"},{"1":"Medicine Clerkship","2":"AY23/24","3.Mean":"86.697712","3.SD":"4.723494"},{"1":"Neurology Clerkship","2":"AY23/24","3.Mean":"85.868651","3.SD":"3.642072"},{"1":"Ob/Gyn Clerkship","2":"AY23/24","3.Mean":"86.376623","3.SD":"5.350558"},{"1":"Pediatric Clerkship","2":"AY23/24","3.Mean":"85.648148","3.SD":"6.596074"},{"1":"Psychiatry Clerkship","2":"AY23/24","3.Mean":"91.018987","3.SD":"3.181298"},{"1":"Surgery Clerkship","2":"AY23/24","3.Mean":"85.466667","3.SD":"9.612399"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["Rotation"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AcadYear"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Final_Numeric.Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Final_Numeric.SD"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Family Medicine Clerkship","2":"AY22/23","3":"92.91604","4":"2.449271"},{"1":"Medicine Clerkship","2":"AY22/23","3":"85.16563","4":"5.152691"},{"1":"Neurology Clerkship","2":"AY22/23","3":"87.79438","4":"5.863535"},{"1":"Ob/Gyn Clerkship","2":"AY22/23","3":"85.90184","4":"4.356370"},{"1":"Pediatric Clerkship","2":"AY22/23","3":"86.17391","4":"6.392503"},{"1":"Psychiatry Clerkship","2":"AY22/23","3":"90.80503","4":"3.026210"},{"1":"Surgery Clerkship","2":"AY22/23","3":"83.69688","4":"8.942707"},{"1":"Family Medicine Clerkship","2":"AY23/24","3":"93.03006","4":"2.799730"},{"1":"Medicine Clerkship","2":"AY23/24","3":"86.69771","4":"4.723494"},{"1":"Neurology Clerkship","2":"AY23/24","3":"85.86865","4":"3.642072"},{"1":"Ob/Gyn Clerkship","2":"AY23/24","3":"86.37662","4":"5.350558"},{"1":"Pediatric Clerkship","2":"AY23/24","3":"85.64815","4":"6.596074"},{"1":"Psychiatry Clerkship","2":"AY23/24","3":"91.01899","4":"3.181298"},{"1":"Surgery Clerkship","2":"AY23/24","3":"85.46667","4":"9.612399"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>FinalScoreAvgSDbyClerkshipYear_csv</code></pre>
@@ -1795,7 +1793,12 @@ FinalScoreAvgSDbyClerkshipYear_rds</code></pre>
 {"columns":[{"label":["X"],"name":[1],"type":["int"],"align":["right"]},{"label":["Rotation"],"name":[2],"type":["chr"],"align":["left"]},{"label":["AcadYear"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Final_Numeric.Mean"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Final_Numeric.SD"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"Family Medicine Clerkship","3":"AY22/23","4":"92.91604","5":"2.449271"},{"1":"2","2":"Medicine Clerkship","3":"AY22/23","4":"85.16563","5":"5.152691"},{"1":"3","2":"Neurology Clerkship","3":"AY22/23","4":"87.79438","5":"5.863535"},{"1":"4","2":"Ob/Gyn Clerkship","3":"AY22/23","4":"85.90184","5":"4.356370"},{"1":"5","2":"Pediatric Clerkship","3":"AY22/23","4":"86.17391","5":"6.392503"},{"1":"6","2":"Psychiatry Clerkship","3":"AY22/23","4":"90.80503","5":"3.026210"},{"1":"7","2":"Surgery Clerkship","3":"AY22/23","4":"83.69688","5":"8.942707"},{"1":"8","2":"Family Medicine Clerkship","3":"AY23/24","4":"93.03006","5":"2.799730"},{"1":"9","2":"Medicine Clerkship","3":"AY23/24","4":"86.69771","5":"4.723494"},{"1":"10","2":"Neurology Clerkship","3":"AY23/24","4":"85.86865","5":"3.642072"},{"1":"11","2":"Ob/Gyn Clerkship","3":"AY23/24","4":"86.37662","5":"5.350558"},{"1":"12","2":"Pediatric Clerkship","3":"AY23/24","4":"85.64815","5":"6.596074"},{"1":"13","2":"Psychiatry Clerkship","3":"AY23/24","4":"91.01899","5":"3.181298"},{"1":"14","2":"Surgery Clerkship","3":"AY23/24","4":"85.46667","5":"9.612399"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<pre class="r"><code>#FinalScoreAvgSDbyClerkshipYear_parquet</code></pre>
+<pre class="r"><code>FinalScoreAvgSDbyClerkshipYear_parquet</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Rotation"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AcadYear"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Final_Numeric.Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Final_Numeric.SD"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Family Medicine Clerkship","2":"AY22/23","3":"92.91604","4":"2.449271"},{"1":"Medicine Clerkship","2":"AY22/23","3":"85.16563","4":"5.152691"},{"1":"Neurology Clerkship","2":"AY22/23","3":"87.79438","4":"5.863535"},{"1":"Ob/Gyn Clerkship","2":"AY22/23","3":"85.90184","4":"4.356370"},{"1":"Pediatric Clerkship","2":"AY22/23","3":"86.17391","4":"6.392503"},{"1":"Psychiatry Clerkship","2":"AY22/23","3":"90.80503","4":"3.026210"},{"1":"Surgery Clerkship","2":"AY22/23","3":"83.69688","4":"8.942707"},{"1":"Family Medicine Clerkship","2":"AY23/24","3":"93.03006","4":"2.799730"},{"1":"Medicine Clerkship","2":"AY23/24","3":"86.69771","4":"4.723494"},{"1":"Neurology Clerkship","2":"AY23/24","3":"85.86865","4":"3.642072"},{"1":"Ob/Gyn Clerkship","2":"AY23/24","3":"86.37662","4":"5.350558"},{"1":"Pediatric Clerkship","2":"AY23/24","3":"85.64815","4":"6.596074"},{"1":"Psychiatry Clerkship","2":"AY23/24","3":"91.01899","4":"3.181298"},{"1":"Surgery Clerkship","2":"AY23/24","3":"85.46667","4":"9.612399"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 </div>
 <div id="aggregrating-with-one-group-two-input-variables-and-a-different-function-for-each" class="section level1">
 <h1>Aggregrating with one group, two input variables, and a different

@@ -24,7 +24,7 @@ ClerkshipGrades_cleaned <- na.omit(ClerkshipGrades)
 str(ClerkshipGrades_cleaned)
 ```
 
-# Modify name of one of the clerkships
+# Create new variable containing clerkship names, create new variable for academic year
 ```{r}
 library(dplyr)
 ClerkshipGrades_cleaned <- ClerkshipGrades_cleaned %>%
@@ -75,8 +75,8 @@ FinalScoreAvgByClerkship_parquet
 
 # Aggregating with two groups, two functions, and one input variable
 ```{r}
-FinalScoreAvgSDbyClerkshipYear=aggregate(data=ClerkshipGrades_cleaned,Final_Numeric~Rotation + AcadYear,
-          function(x) c(Mean = mean(x), SD = sd(x) ) )
+FinalScoreAvgSDbyClerkshipYear=do.call(data.frame, aggregate(data=ClerkshipGrades_cleaned,Final_Numeric~Rotation + AcadYear,
+          function(x) c(Mean = mean(x), SD = sd(x) ) ))
 FinalScoreAvgSDbyClerkshipYear
 ```
 
@@ -84,19 +84,15 @@ FinalScoreAvgSDbyClerkshipYear
 ```{r}
 saveRDS(FinalScoreAvgSDbyClerkshipYear, file = "finalOutput/output221.rds") 
 write.csv(FinalScoreAvgSDbyClerkshipYear,"finalOutput/output221.csv")
-
-#arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = "finalOutput/output221.parquet")
+arrow::write_parquet(FinalScoreAvgSDbyClerkshipYear,sink = "finalOutput/output221.parquet")
 
 
 FinalScoreAvgSDbyClerkshipYear_rds <- readRDS("finalOutput/output221.rds")
 FinalScoreAvgSDbyClerkshipYear_csv <- read.csv("finalOutput/output221.csv")
-
-#FinalScoreAvgSDbyClerkshipYear_parquet <- read_parquet("finalOutput/output221.parquet")
-
+FinalScoreAvgSDbyClerkshipYear_parquet <- read_parquet("finalOutput/output221.parquet")
 FinalScoreAvgSDbyClerkshipYear_rds
 FinalScoreAvgSDbyClerkshipYear_csv
-
-#FinalScoreAvgSDbyClerkshipYear_parquet
+FinalScoreAvgSDbyClerkshipYear_parquet
 ```
 
 # Aggregrating with one group, two input variables, and a different function for each
